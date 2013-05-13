@@ -20,13 +20,15 @@
             var defaults = {
                     customClass: 'customSelect',
                     mapClass:    true,
-                    mapStyle:    true
+                    mapStyle:    true,
+                    iconElement: false,
+                    iconElementPosition: 'after'
             },
             options = $.extend(defaults, options),
             prefix = options.customClass,
             changed = function ($select,customSelectSpan) {
                 var currentSelected = $select.find(':selected'),
-                customSelectSpanInner = customSelectSpan.children(':first'),
+                customSelectSpanInner = customSelectSpan.children('.customSelectInner'),
                 html = currentSelected.html() || '&nbsp;';
 
                 customSelectSpanInner.html(html);
@@ -49,7 +51,8 @@
             return this.each(function () {
                 var $select = $(this),
                     customSelectInnerSpan = $('<span />').addClass(getClass('Inner')),
-                    customSelectSpan = $('<span />');
+                    customSelectSpan = $('<span />'),
+                    customSelectIconElement = $('<span />').addClass(getClass('Icon'));
 
                 $select.after(customSelectSpan.append(customSelectInnerSpan));
                 
@@ -60,6 +63,13 @@
                 }
                 if (options.mapStyle) {
                     customSelectSpan.attr('style', $select.attr('style'));
+                }
+                if (options.iconElement) {
+                    if (options.iconElementPosition === 'after') {
+                        customSelectSpan.append(customSelectIconElement);
+                    } else if (options.iconElementPosition === 'before') {
+                        customSelectSpan.prepend(customSelectIconElement);
+                    }
                 }
 
                 $select
